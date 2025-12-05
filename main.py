@@ -1,30 +1,22 @@
 import pygame
-import sys
-import time
 
-print("Startuję main.py...")
+from core.game import Game
+from ui.workshop_scene import WorkshopScene
+from world.workshop_state import WorkshopState
 
-pygame.init()
-print("pygame.init OK")
 
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Leonardo's Workshop - Prototype")
+def main() -> None:
+    pygame.init()
 
-clock = pygame.time.Clock()
-running = True
+    width, height = 1280, 720
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Leonardo's Workshop: Renaissance Genius Simulator")
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    workshop_state = WorkshopState()
+    initial_scene = WorkshopScene(workshop_state)
+    game = Game(screen, initial_scene)
+    game.run()
 
-    screen.fill((30, 30, 40))
 
-    pygame.display.flip()
-    clock.tick(2)  # 2 FPS, żeby spam w konsoli nie był dziki
-    print("tick")
-
-pygame.quit()
-print("pygame.quit()")
-sys.exit()
+if __name__ == "__main__":
+    main()
