@@ -36,6 +36,13 @@ class WorkshopScene(Scene):
             f"Reputation: {self.workshop_state.reputation:.1f}",
             f"Inspiration: {self.workshop_state.inspiration:.1f}",
         ]
+        materials = self.workshop_state.materials
+        stats_lines.append(
+            "Materials: "
+            f"wood={materials.get('wood', 0)}, "
+            f"metal={materials.get('metal', 0)}, "
+            f"pigment={materials.get('pigment', 0)}"
+        )
 
         for index, line in enumerate(stats_lines):
             text_surf = self.font.render(line, True, self.text_color)
