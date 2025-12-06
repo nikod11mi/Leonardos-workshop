@@ -4,15 +4,22 @@ from world.workshop_state import WorkshopState
 
 
 class TimeSystem:
-    """Skeleton for advancing in-game time."""
+    """Simple time tracker that converts frame ticks into in-game days."""
 
-    def __init__(self, workshop_state: WorkshopState) -> None:
-        self.workshop_state = workshop_state
+    def __init__(self, ticks_per_day: int = 300) -> None:
+        if ticks_per_day <= 0:
+            raise ValueError("ticks_per_day must be a positive integer.")
+        self.ticks_per_day: int = ticks_per_day
+        self._tick_counter: int = 0
 
-    def advance_day(self, days: int = 1) -> int:
-        """Advance the in-game calendar by a number of days."""
-        if days < 0:
-            raise ValueError("Days to advance must be non-negative.")
+    @property
+    def tick_counter(self) -> int:
+        """Current progress toward the next in-game day."""
+        return self._tick_counter
 
-        self.workshop_state.day += days
-        return self.workshop_state.day
+    def tick(self, workshop_state: WorkshopState) -> None:
+        """Advance the internal counter and progress the workshop's day."""
+        self._tick_counter += 1
+        if self._tick_counter >= self.ticks_per_day:
+            workshop_state.day += 1
+            self._tick_counter = 0

@@ -14,7 +14,7 @@ def main() -> None:
 
     workshop_state = WorkshopState()
     initial_scene = WorkshopScene(workshop_state)
-    game = Game(screen, initial_scene)
+    game = Game(screen, initial_scene, workshop_state)
     game.run()
 
 
