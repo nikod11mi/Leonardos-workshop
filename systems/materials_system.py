@@ -13,6 +13,13 @@ class MaterialsSystem:
         amount: int,
         price_per_unit: float,
     ) -> int:
+        """
+        Purchase a tracked material.
+
+        Raises:
+            ValueError: If amount is not positive, price_per_unit is negative,
+            the material is unknown, or there is not enough money.
+        """
         if amount <= 0:
             raise ValueError("Amount to purchase must be positive.")
         if price_per_unit < 0:
@@ -30,11 +37,18 @@ class MaterialsSystem:
     def remove_material(
         self, workshop_state: WorkshopState, material_name: str, amount: int
     ) -> int:
+        """
+        Remove a quantity of a tracked material.
+
+        Raises:
+            ValueError: If amount is not positive, the material is unknown,
+            or there is not enough material to remove.
+        """
         if amount <= 0:
             raise ValueError("Amount to remove must be positive.")
         self._validate_material_exists(workshop_state, material_name)
 
-        current_amount = workshop_state.materials.get(material_name, 0)
+        current_amount = workshop_state.materials[material_name]
         if current_amount < amount:
             raise ValueError("Not enough material available to remove.")
 

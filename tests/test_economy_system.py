@@ -53,3 +53,43 @@ def test_purchasing_materials_updates_counts_and_money() -> None:
 
     assert state.materials["metal"] == 5
     assert state.money == 150.0 - 7.5
+
+
+def test_purchase_material_with_negative_price_raises() -> None:
+    state = WorkshopState()
+    materials_system = MaterialsSystem()
+
+    with pytest.raises(ValueError):
+        materials_system.purchase_material(state, "wood", 1, price_per_unit=-0.1)
+
+
+def test_purchase_material_with_non_positive_amount_raises() -> None:
+    state = WorkshopState()
+    materials_system = MaterialsSystem()
+
+    with pytest.raises(ValueError):
+        materials_system.purchase_material(state, "wood", 0, price_per_unit=1.0)
+
+
+def test_purchase_unknown_material_raises() -> None:
+    state = WorkshopState()
+    materials_system = MaterialsSystem()
+
+    with pytest.raises(ValueError):
+        materials_system.purchase_material(state, "stone", 1, price_per_unit=1.0)
+
+
+def test_remove_material_with_non_positive_amount_raises() -> None:
+    state = WorkshopState()
+    materials_system = MaterialsSystem()
+
+    with pytest.raises(ValueError):
+        materials_system.remove_material(state, "wood", 0)
+
+
+def test_remove_unknown_material_raises() -> None:
+    state = WorkshopState()
+    materials_system = MaterialsSystem()
+
+    with pytest.raises(ValueError):
+        materials_system.remove_material(state, "stone", 1)
