@@ -3,6 +3,7 @@ from __future__ import annotations
 import pygame
 
 from core.scene import Scene
+from systems.contracts import ContractsSystem
 from systems.economy_system import EconomySystem
 from systems.time_system import TimeSystem
 from world.workshop_state import WorkshopState
@@ -21,6 +22,7 @@ class Game:
         self.running = True
         self.time_system = TimeSystem()
         self.economy_system = EconomySystem()
+        self.contracts_system = ContractsSystem()
         self._last_processed_day = workshop_state.day
 
     def change_scene(self, scene: Scene) -> None:
@@ -42,6 +44,10 @@ class Game:
             for _ in range(days_passed):
                 self.economy_system.apply_daily_upkeep(self.workshop_state)
                 self.economy_system.apply_inspiration_gain(self.workshop_state)
+                self.contracts_system.remove_expired_contracts(
+                    self.workshop_state, self.workshop_state.day
+                )
+                self.contracts_system.maybe_generate_daily_contracts(self.workshop_state)
             self._last_processed_day = current_day
         self.scene.update(dt)
 

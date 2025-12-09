@@ -55,8 +55,25 @@ class WorkshopScene(Scene):
         pygame.draw.rect(surface, self.panel_color, panel_rect)
         pygame.draw.rect(surface, pygame.Color("dimgray"), panel_rect, width=2)
 
-        panel_text = self.panel_font.render(
-            "Contracts will appear here", True, self.text_color
-        )
-        text_pos = panel_text.get_rect(center=panel_rect.center)
-        surface.blit(panel_text, text_pos)
+        panel_padding = 12
+        text_y = panel_rect.top + panel_padding
+        contracts = self.workshop_state.active_contracts
+        if contracts:
+            for index, contract in enumerate(contracts, start=1):
+                puzzle_label = (
+                    contract.puzzle_type.value
+                    if hasattr(contract.puzzle_type, "value")
+                    else str(contract.puzzle_type)
+                )
+                line = (
+                    f"{index}) {contract.name} - {int(contract.reward_money)} florins "
+                    f"[{puzzle_label}]"
+                )
+                panel_text = self.panel_font.render(line, True, self.text_color)
+                surface.blit(panel_text, (panel_rect.left + panel_padding, text_y))
+                text_y += 26
+        else:
+            panel_text = self.panel_font.render(
+                "No active contracts", True, self.text_color
+            )
+            surface.blit(panel_text, (panel_rect.left + panel_padding, text_y))
